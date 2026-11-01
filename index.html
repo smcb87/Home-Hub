@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ATLAS">
+<title>ATLAS — Home Dashboard</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;padding:0;min-height:100%;background:#171d25;color:#f5f6f7;font-family:Helvetica,Arial,sans-serif}body{padding:24px}.wrap{max-width:1100px;margin:0 auto}.top{overflow:hidden;margin-bottom:20px}.brand{float:left;font-size:32px;letter-spacing:5px;font-weight:bold}.subtitle{font-size:11px;letter-spacing:2px;color:#9cacba;margin-top:4px}.status{float:right;color:#93c9b2;font-size:13px;padding-top:12px}.panel{background:#252e39;border:1px solid #35414d;border-radius:12px;padding:20px;margin-bottom:16px}.hero{min-height:145px}.date{font-size:15px;letter-spacing:2px;color:#aebbc9;text-transform:uppercase}.clock{font-size:76px;font-weight:200;line-height:1.15;letter-spacing:1px;margin:7px 0}.desc{color:#aebbc9;font-size:14px}.columns{overflow:hidden;margin-left:-8px;margin-right:-8px}.half{width:50%;float:left;padding:0 8px}.half .panel{min-height:223px}.label{font-size:12px;color:#b4c4d2;letter-spacing:1.5px;font-weight:bold}.label .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#d5ad79;margin-right:8px}.muted{color:#aebbc9;font-size:14px}.input{background:#141b23;border:1px solid #465463;border-radius:7px;color:white;padding:12px;width:100%;font-size:16px;-webkit-appearance:none}.button{background:#729d93;color:#101923;border:0;border-radius:7px;padding:12px 17px;font-weight:bold;font-size:15px;cursor:pointer;-webkit-appearance:none}.smallbutton{background:#3b4653;color:#f4f4f4;border:0;border-radius:6px;padding:8px 10px;font-size:13px;cursor:pointer}.actions{margin-top:12px}.taskline{padding:9px 0;border-bottom:1px solid #35414d;color:#f0f3f6;font-size:15px;overflow:hidden}.taskline input{margin-right:10px;width:20px;height:20px;vertical-align:middle}.taskline.done span{text-decoration:line-through;color:#83939f}.taskline button{float:right}.taskrow{overflow:hidden;margin-top:10px}.taskrow .input{width:72%;float:left}.taskrow .button{width:25%;float:right;padding-left:4px;padding-right:4px}.note{width:100%;height:112px;resize:none;font-size:16px;line-height:1.45}.footer{color:#8799a7;text-align:center;font-size:12px;padding:3px 0 16px}.hidden{display:none}.message{font-size:12px;color:#c2ad80;margin-top:10px;min-height:14px}a{color:#b5d8d0}.space{height:12px}@media (max-width:650px){body{padding:15px}.brand{font-size:26px}.clock{font-size:61px}.half{width:100%}.half .panel{min-height:0}.hero{min-height:0}.status{font-size:12px}.panel{padding:16px}}@media (min-width:651px) and (max-height:680px){body{padding:15px}.panel{padding:15px;margin-bottom:12px}.clock{font-size:58px}.hero{min-height:0}.half .panel{min-height:190px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><div class="brand">ATLAS<div class="subtitle">YOUR HOME DASHBOARD</div></div><div class="status" id="network">● LOCAL MODE</div></div>
+<div class="panel hero"><div class="date" id="today">DATE</div><div class="clock" id="clock">--:--</div><div class="desc">A simple, private dashboard for your iPad 2.</div></div>
+<div class="columns">
+<div class="half"><div class="panel"><div class="label"><i class="dot" style="background:#9db8d4"></i> TODAY'S FOCUS</div><p class="muted">Add your priorities. They are saved on this device, where browser storage is available.</p><div id="tasks"></div><div class="taskrow"><input class="input" id="taskInput" placeholder="New task" maxlength="90"><button class="button" id="addTask">ADD</button></div><div class="message" id="taskMsg"></div></div></div>
+<div class="half"><div class="panel"><div class="label"><i class="dot" style="background:#bb9fd3"></i> QUICK NOTES</div><p class="muted">Ideas, reminders, music sketches or anything else.</p><textarea id="notes" class="input note" placeholder="Type a note..."></textarea><div class="actions"><button id="saveNotes" class="smallbutton">Save notes</button></div><div class="message" id="noteMsg"></div></div></div>
+<div class="half"><div class="panel"><div class="label"><i class="dot" style="background:#8dc4aa"></i> MUSIC CORNER</div><p class="muted">A space for your listening and production tools.</p><p>Next: local music launcher and simple audio controls.</p><p class="muted">No streaming login required for this first build.</p></div></div>
+<div class="half"><div class="panel"><div class="label"><i class="dot" style="background:#deb77e"></i> SYSTEM & NEXT FEATURES</div><p class="muted">ATLAS v0.1 — designed for legacy Safari.</p><p>✓ Live clock &nbsp; ✓ Local tasks &nbsp; ✓ Notes</p><p class="muted">Next: calendar, weather and optional local-network integrations.</p></div></div>
+</div>
+<div class="footer">ATLAS v0.1 · No external libraries · Works without a jailbreak · Avoid storing sensitive information</div>
+</div>
+<script>
+(function(){
+'use strict';
+var tasks=[],storageWorks=true;
+function el(id){return document.getElementById(id);}
+function pad(n){return n<10?'0'+n:''+n;}
+function tick(){var d=new Date(),days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],months=['January','February','March','April','May','June','July','August','September','October','November','December'];el('clock').innerHTML=pad(d.getHours())+':'+pad(d.getMinutes());el('today').innerHTML=days[d.getDay()]+', '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();}
+function get(k){try{return window.localStorage.getItem(k);}catch(e){storageWorks=false;return null;}}
+function put(k,v){try{window.localStorage.setItem(k,v);return true;}catch(e){storageWorks=false;return false;}}
+function safeText(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function persist(){return put('atlas_tasks_v1',JSON.stringify(tasks));}
+function render(){var out='',i;for(i=0;i<tasks.length;i++){out+='<div class="taskline'+(tasks[i].done?' done':'')+'"><input type="checkbox" data-index="'+i+'" '+(tasks[i].done?'checked':'')+'><span>'+safeText(tasks[i].text)+'</span><button class="smallbutton" data-delete="'+i+'">×</button></div>';}el('tasks').innerHTML=out||'<p class="muted">No tasks yet.</p>';var inputs=el('tasks').getElementsByTagName('input');for(i=0;i<inputs.length;i++){inputs[i].onchange=function(){var idx=parseInt(this.getAttribute('data-index'),10);tasks[idx].done=this.checked;persist();render();};}var buttons=el('tasks').getElementsByTagName('button');for(i=0;i<buttons.length;i++){buttons[i].onclick=function(){var idx=parseInt(this.getAttribute('data-delete'),10);tasks.splice(idx,1);persist();render();};}}
+function addTask(){var val=el('taskInput').value.replace(/^\s+|\s+$/g,'');if(!val)return;if(tasks.length>=25){el('taskMsg').innerHTML='Limit: 25 tasks';return;}tasks.push({text:val,done:false});el('taskInput').value='';if(!persist())el('taskMsg').innerHTML='Browser storage is unavailable; tasks may not persist.';render();}
+var saved=get('atlas_tasks_v1');if(saved){try{var p=JSON.parse(saved);if(Object.prototype.toString.call(p)==='[object Array]')tasks=p;}catch(e){tasks=[];}}
+el('notes').value=get('atlas_notes_v1')||'';el('addTask').onclick=addTask;el('taskInput').onkeydown=function(e){e=e||window.event;if(e.keyCode===13){addTask();return false;}};el('saveNotes').onclick=function(){el('noteMsg').innerHTML=put('atlas_notes_v1',el('notes').value)?'Saved on this device.':'Unable to save: browser storage blocked.';};
+render();tick();setInterval(tick,10000);if(!storageWorks){el('taskMsg').innerHTML='Storage may be unavailable when opening as a local file. Hosting over HTTP(S) can help.';}
+})();
+</script>
+</body>
+</html>
